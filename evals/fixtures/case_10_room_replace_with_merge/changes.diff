@@ -1,0 +1,24 @@
+diff --git a/edu-pad-app/src/main/java/com/edu/pad/data/local/StudyRecordDao.kt b/edu-pad-app/src/main/java/com/edu/pad/data/local/StudyRecordDao.kt
+index 4d1e0a2..b7c6f13 100644
+--- a/edu-pad-app/src/main/java/com/edu/pad/data/local/StudyRecordDao.kt
++++ b/edu-pad-app/src/main/java/com/edu/pad/data/local/StudyRecordDao.kt
+@@ -14,3 +14,6 @@ interface StudyRecordDao {
+     @Query("SELECT * FROM study_record WHERE unit_id = :unitId")
+     suspend fun listByUnit(unitId: Long): List<StudyRecordEntity>
++
++    @Insert(onConflict = OnConflictStrategy.REPLACE)
++    suspend fun upsertMerged(records: List<StudyRecordEntity>)
+ }
+diff --git a/edu-pad-app/src/main/java/com/edu/pad/data/repo/StudyRecordRepository.kt b/edu-pad-app/src/main/java/com/edu/pad/data/repo/StudyRecordRepository.kt
+index 9a0c3e1..e25f8b4 100644
+--- a/edu-pad-app/src/main/java/com/edu/pad/data/repo/StudyRecordRepository.kt
++++ b/edu-pad-app/src/main/java/com/edu/pad/data/repo/StudyRecordRepository.kt
+@@ -40,3 +40,8 @@ class StudyRecordRepository(
+     suspend fun sync(unitId: Long) {
+         val remote = api.fetchRecords(unitId)
++        val local = dao.listByUnit(unitId).associateBy { it.lessonId }
++        val merged = remote.map { r ->
++            local[r.lessonId]?.takeIf { it.updatedAt > r.updatedAt } ?: r
++        }
++        dao.upsertMerged(merged)
+     }

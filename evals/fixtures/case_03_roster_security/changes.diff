@@ -1,0 +1,19 @@
+diff --git a/edukids-teach-web-api/src/main/java/com/edukids/teach/vo/StudentRosterVO.java b/edukids-teach-web-api/src/main/java/com/edukids/teach/vo/StudentRosterVO.java
+index 8812aa0..9941bc3 100644
+--- a/edukids-teach-web-api/src/main/java/com/edukids/teach/vo/StudentRosterVO.java
++++ b/edukids-teach-web-api/src/main/java/com/edukids/teach/vo/StudentRosterVO.java
+@@ -12,5 +12,8 @@ public class StudentRosterVO {
+     private Long studentId;
+     private String nickname;
++    private String password;
++    private String payPwd;
+ }
+diff --git a/edukids-teach-web/src/views/LoginView.vue b/edukids-teach-web/src/views/LoginView.vue
+index 3310fa2..5520fb9 100644
+--- a/edukids-teach-web/src/views/LoginView.vue
++++ b/edukids-teach-web/src/views/LoginView.vue
+@@ -68,4 +68,7 @@ async function handleLogin() {
++  if (rememberMe.value) {
++    localStorage.setItem('teach_saved_password', form.password)
++  }
+ }

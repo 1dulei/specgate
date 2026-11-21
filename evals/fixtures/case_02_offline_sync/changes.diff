@@ -1,0 +1,24 @@
+diff --git a/kid-app/feature-phonics/src/main/java/com/edukids/phonics/data/PhonicsSyncRepository.kt b/kid-app/feature-phonics/src/main/java/com/edukids/phonics/data/PhonicsSyncRepository.kt
+index 2098ab1..7731cd2 100644
+--- a/kid-app/feature-phonics/src/main/java/com/edukids/phonics/data/PhonicsSyncRepository.kt
++++ b/kid-app/feature-phonics/src/main/java/com/edukids/phonics/data/PhonicsSyncRepository.kt
+@@ -29,6 +29,14 @@ class PhonicsSyncRepository(
++    suspend fun pullServerProgress(studentId: Long) {
++        val remoteItems = api.fetchUnitStatuses(studentId)
++        statusDao.overwriteAll(remoteItems)
++    }
++
++    suspend fun submitPracticeBatch(records: List<PracticeItem>): Boolean {
++        if (records.isEmpty()) return true
++        return api.uploadBatch(records).isSuccess
++    }
+ }
+diff --git a/kid-app/feature-phonics/src/main/java/com/edukids/phonics/ui/PhonicsCourseChooseDialog.kt b/kid-app/feature-phonics/src/main/java/com/edukids/phonics/ui/PhonicsCourseChooseDialog.kt
+index 1034ef1..9921ef8 100644
+--- a/kid-app/feature-phonics/src/main/java/com/edukids/phonics/ui/PhonicsCourseChooseDialog.kt
++++ b/kid-app/feature-phonics/src/main/java/com/edukids/phonics/ui/PhonicsCourseChooseDialog.kt
+@@ -54,4 +54,6 @@ class PhonicsCourseChooseDialog {
++    fun bindUnitProgressBadge(tvBadge: TextView) {
++        tvBadge.text = "0/15"
++    }
+ }

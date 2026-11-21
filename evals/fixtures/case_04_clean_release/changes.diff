@@ -1,0 +1,31 @@
+diff --git a/edukids-mall-service/src/main/java/com/edukids/mall/service/impl/MallServiceImpl.java b/edukids-mall-service/src/main/java/com/edukids/mall/service/impl/MallServiceImpl.java
+index 8823cd9..9951ee1 100644
+--- a/edukids-mall-service/src/main/java/com/edukids/mall/service/impl/MallServiceImpl.java
++++ b/edukids-mall-service/src/main/java/com/edukids/mall/service/impl/MallServiceImpl.java
+@@ -42,10 +42,14 @@ public class MallServiceImpl implements MallService {
++    @Transactional(rollbackFor = Exception.class)
++    public RedeemOrderVO redeemSafely(Long authenticatedStudentId, Long itemId, int costPoints) {
++        int affectedRows = accountMapper.deductWithLock(authenticatedStudentId, costPoints);
++        if (affectedRows != 1) {
++            throw new BizException("INSUFFICIENT_POINTS");
++        }
++        RedeemOrder order = RedeemOrder.createVerified(authenticatedStudentId, itemId);
++        orderMapper.insert(order);
++        return RedeemOrderVO.from(order);
++    }
+ }
+diff --git a/kid-app/feature-phonics/src/main/java/com/edukids/phonics/data/PhonicsSyncRepository.kt b/kid-app/feature-phonics/src/main/java/com/edukids/phonics/data/PhonicsSyncRepository.kt
+index 7731cd2..8842ef0 100644
+--- a/kid-app/feature-phonics/src/main/java/com/edukids/phonics/data/PhonicsSyncRepository.kt
++++ b/kid-app/feature-phonics/src/main/java/com/edukids/phonics/data/PhonicsSyncRepository.kt
+@@ -29,8 +29,13 @@ class PhonicsSyncRepository {
++    suspend fun mergeServerProgress(studentId: Long) {
++        val remoteItems = api.fetchUnitStatuses(studentId)
++        for (remote in remoteItems) {
++            val local = statusDao.findByUnitId(remote.unitId)
++            if (local == null || (!local.pendingUpload && remote.updatedAt > local.updatedAt)) {
++                statusDao.upsert(remote)
++            }
++        }
++    }
+ }

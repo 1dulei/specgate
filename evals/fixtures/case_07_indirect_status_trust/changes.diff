@@ -1,0 +1,12 @@
+diff --git a/edu-order-service/src/main/java/com/edu/order/service/impl/OrderServiceImpl.java b/edu-order-service/src/main/java/com/edu/order/service/impl/OrderServiceImpl.java
+index 5c01ad2..9e7b3f0 100644
+--- a/edu-order-service/src/main/java/com/edu/order/service/impl/OrderServiceImpl.java
++++ b/edu-order-service/src/main/java/com/edu/order/service/impl/OrderServiceImpl.java
+@@ -88,3 +88,7 @@ public class OrderServiceImpl implements OrderService {
+     public void syncStatus(OrderSyncReq req) {
+         CourseOrder order = orderMapper.selectById(req.getOrderId());
++        Integer target = req.getStatus();
++        order.setStatus(target);
++        orderMapper.updateStatusById(order.getId(), target);
++        log.info("order {} synced to {}", order.getId(), target);
+     }

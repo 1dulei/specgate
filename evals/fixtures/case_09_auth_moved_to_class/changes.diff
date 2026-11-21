@@ -1,0 +1,15 @@
+diff --git a/edu-teacher-service/src/main/java/com/edu/teacher/controller/RosterController.java b/edu-teacher-service/src/main/java/com/edu/teacher/controller/RosterController.java
+index 3f2e911..c08a6d2 100644
+--- a/edu-teacher-service/src/main/java/com/edu/teacher/controller/RosterController.java
++++ b/edu-teacher-service/src/main/java/com/edu/teacher/controller/RosterController.java
+@@ -12,9 +12,9 @@
++@PreAuthorize("hasRole('TEACHER')")
+ @RestController
+ @RequestMapping("/api/v1/teacher/roster")
+ public class RosterController {
+ 
+-    @PreAuthorize("hasRole('TEACHER')")
+     @GetMapping("/list")
+     public Result<List<RosterVO>> list(@RequestParam Long classId) {
+         return Result.ok(rosterService.list(classId));
+     }

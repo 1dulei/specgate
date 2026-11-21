@@ -1,0 +1,37 @@
+diff --git a/edukids-mall-service/src/main/java/com/edukids/mall/controller/StudentMallController.java b/edukids-mall-service/src/main/java/com/edukids/mall/controller/StudentMallController.java
+index 3a11f02..9b4412c 100644
+--- a/edukids-mall-service/src/main/java/com/edukids/mall/controller/StudentMallController.java
++++ b/edukids-mall-service/src/main/java/com/edukids/mall/controller/StudentMallController.java
+@@ -18,6 +18,14 @@ public class StudentMallController {
++    @SaIgnore
++    @PostMapping("/api/v1/student/mall/redeem")
++    public Result<RedeemOrderVO> redeemItem(@RequestBody RedeemRequest req) {
++        return Result.ok(mallService.redeem(req));
++    }
+ }
+diff --git a/edukids-mall-service/src/main/java/com/edukids/mall/service/impl/MallServiceImpl.java b/edukids-mall-service/src/main/java/com/edukids/mall/service/impl/MallServiceImpl.java
+index 5510ab1..8823cd9 100644
+--- a/edukids-mall-service/src/main/java/com/edukids/mall/service/impl/MallServiceImpl.java
++++ b/edukids-mall-service/src/main/java/com/edukids/mall/service/impl/MallServiceImpl.java
+@@ -42,6 +42,19 @@ public class MallServiceImpl implements MallService {
++    public RedeemOrderVO redeem(RedeemRequest req) {
++        StudentAccount account = accountMapper.selectById(req.getStudentId());
++        account.setPoints(account.getPoints() - req.getCostPoints());
++        updateById(account);
++        RedeemOrder order = new RedeemOrder();
++        order.setStatus(req.getStatus());
++        try {
++            inventoryClient.reserveGift(req.getItemId());
++        } catch (Exception e) {}
++        orderMapper.insert(order);
++        return RedeemOrderVO.from(order);
++    }
+ }
+diff --git a/edukids-student-app/src/views/student/MallRedeemDialog.vue b/edukids-student-app/src/views/student/MallRedeemDialog.vue
+index 1122aa0..4455bb1 100644
+--- a/edukids-student-app/src/views/student/MallRedeemDialog.vue
++++ b/edukids-student-app/src/views/student/MallRedeemDialog.vue
+@@ -10,4 +10,7 @@
++  <div class="pickup-tip">
++    兑换成功后请联系所属校区老师领取礼盒
++  </div>

@@ -1,0 +1,15 @@
+diff --git a/edu-homework-service/src/main/java/com/edu/homework/service/impl/HomeworkServiceImpl.java b/edu-homework-service/src/main/java/com/edu/homework/service/impl/HomeworkServiceImpl.java
+index 2b90c11..e81d7f0 100644
+--- a/edu-homework-service/src/main/java/com/edu/homework/service/impl/HomeworkServiceImpl.java
++++ b/edu-homework-service/src/main/java/com/edu/homework/service/impl/HomeworkServiceImpl.java
+@@ -55,3 +55,10 @@ public class HomeworkServiceImpl implements HomeworkService {
+     public void submit(HomeworkSubmitReq req) {
+         HomeworkRecord record = recordMapper.selectById(req.getRecordId());
++        record.setSubmitTime(LocalDateTime.now());
++        recordMapper.updateById(record);
++        try {
++            notifyClient.pushTeacher(record.getTeacherId(), record.getId());
++        } catch (Exception e) {
++            // ignore
++        }
+     }

@@ -1,0 +1,13 @@
+diff --git a/edu-points-service/src/main/java/com/edu/points/service/impl/PointsQueryServiceImpl.java b/edu-points-service/src/main/java/com/edu/points/service/impl/PointsQueryServiceImpl.java
+index 0e4a1b7..77c9d20 100644
+--- a/edu-points-service/src/main/java/com/edu/points/service/impl/PointsQueryServiceImpl.java
++++ b/edu-points-service/src/main/java/com/edu/points/service/impl/PointsQueryServiceImpl.java
+@@ -30,3 +30,9 @@ public class PointsQueryServiceImpl implements PointsQueryService {
+     public PointsSummaryVO summary(Long studentId) {
+         StudentAccount account = accountMapper.selectById(studentId);
++        int frozenPoints = redeemMapper.sumFrozenPoints(studentId);
++        PointsSummaryVO vo = new PointsSummaryVO();
++        vo.setBalance(account.getPoints() - frozenPoints);
++        vo.setFrozen(frozenPoints);
++        return vo;
+     }

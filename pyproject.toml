@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "specgate"
+version = "0.3.0"
+description = "Evidence-bound shift-left PRD spec extractor, multi-repo diff risk auditor, and release gate CLI."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [
+  { name = "Du Lei", email = "a1437699690@163.com" }
+]
+keywords = ["qa", "testing", "shift-left", "code-review", "release-gate", "agent-skill"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Software Development :: Quality Assurance",
+  "Topic :: Software Development :: Testing",
+]
+dependencies = []
+
+[project.scripts]
+specgate = "specgate.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,86 @@
+{
+  "benchmark_version": "1.1.0",
+  "description": "Desensitized EdTech multi-platform diff benchmark. case_01-04 are the original seed cases written alongside the rules; case_05-10 are hard cases added afterwards to expose blind spots (removed guards, mapper-style calls, indirect status trust, read-only calculations, cross-hunk merge logic).",
+  "cases": [
+    {
+      "case_id": "case_01_mall_redemption",
+      "title": "学员积分商城兑换与并发库存回补（服务端 + 学生端）",
+      "dir": "fixtures/case_01_mall_redemption",
+      "group": "seed",
+      "expected_decision": "BLOCKED",
+      "expected_rules": ["SG-AUTH-001", "SG-TRUST-002", "SG-CONC-004", "SG-ERR-005", "SG-COPY-009"]
+    },
+    {
+      "case_id": "case_02_offline_sync",
+      "title": "自然拼读单元离线学习进度同步与批次提交（Android 客户端）",
+      "dir": "fixtures/case_02_offline_sync",
+      "group": "seed",
+      "expected_decision": "BLOCKED",
+      "expected_rules": ["SG-SYNC-006", "SG-DATA-007", "SG-UI-008"]
+    },
+    {
+      "case_id": "case_03_roster_security",
+      "title": "学管工作台学员名册查询与记住密码存储（服务端 + Web 前端）",
+      "dir": "fixtures/case_03_roster_security",
+      "group": "seed",
+      "expected_decision": "BLOCKED",
+      "expected_rules": ["SG-SEC-003"]
+    },
+    {
+      "case_id": "case_04_clean_release",
+      "title": "合规修复后的积分兑换与离线合并补丁（基线绿灯验证）",
+      "dir": "fixtures/case_04_clean_release",
+      "group": "seed",
+      "expected_decision": "PASS",
+      "expected_rules": []
+    },
+    {
+      "case_id": "case_05_removed_auth",
+      "title": "【难例】退费审批接口删除了 @PreAuthorize（删除行风险）",
+      "dir": "fixtures/case_05_removed_auth",
+      "group": "hard",
+      "expected_decision": "BLOCKED",
+      "expected_rules": ["SG-AUTH-010"]
+    },
+    {
+      "case_id": "case_06_mapper_multiline_catch",
+      "title": "【难例】mapper.updateById 未校验返回值 + 多行空 catch",
+      "dir": "fixtures/case_06_mapper_multiline_catch",
+      "group": "hard",
+      "expected_decision": "BLOCKED",
+      "expected_rules": ["SG-ERR-005"]
+    },
+    {
+      "case_id": "case_07_indirect_status_trust",
+      "title": "【难例】先把客户端状态赋给局部变量，再写入订单（间接采信）",
+      "dir": "fixtures/case_07_indirect_status_trust",
+      "group": "hard",
+      "expected_decision": "BLOCKED",
+      "expected_rules": ["SG-TRUST-002"]
+    },
+    {
+      "case_id": "case_08_display_calc_safe",
+      "title": "【难例】只读接口在 VO 中计算可用积分（不应报并发扣减）",
+      "dir": "fixtures/case_08_display_calc_safe",
+      "group": "hard",
+      "expected_decision": "PASS",
+      "expected_rules": []
+    },
+    {
+      "case_id": "case_09_auth_moved_to_class",
+      "title": "【难例】权限注解从方法级上移到类级（不应报删除鉴权）",
+      "dir": "fixtures/case_09_auth_moved_to_class",
+      "group": "hard",
+      "expected_decision": "PASS",
+      "expected_rules": []
+    },
+    {
+      "case_id": "case_10_room_replace_with_merge",
+      "title": "【难例】DAO 使用 REPLACE，但合并逻辑在另一个文件中按时间戳处理",
+      "dir": "fixtures/case_10_room_replace_with_merge",
+      "group": "hard",
+      "expected_decision": "PASS",
+      "expected_rules": []
+    }
+  ]
+}

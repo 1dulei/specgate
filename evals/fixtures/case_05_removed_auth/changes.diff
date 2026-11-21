@@ -1,0 +1,14 @@
+diff --git a/edu-admin-service/src/main/java/com/edu/admin/controller/RefundController.java b/edu-admin-service/src/main/java/com/edu/admin/controller/RefundController.java
+index 71c2a90..a3d18e4 100644
+--- a/edu-admin-service/src/main/java/com/edu/admin/controller/RefundController.java
++++ b/edu-admin-service/src/main/java/com/edu/admin/controller/RefundController.java
+@@ -21,9 +21,8 @@ public class RefundController {
+     @Resource
+     private RefundService refundService;
+ 
+-    @PreAuthorize("hasAuthority('finance:refund:approve')")
+     @PostMapping("/api/v1/admin/refund/approve")
+     public Result<Void> approve(@RequestBody RefundApproveReq req) {
+         refundService.approve(req.getRefundId(), req.getRemark());
+         return Result.ok();
+     }
